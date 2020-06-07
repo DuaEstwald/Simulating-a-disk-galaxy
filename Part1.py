@@ -1,4 +1,4 @@
-# This exercise pretends to recreate the 'Orbit of Planets' pdf
+# This exercise pretends to recreate the 'Project3' pdf
 
 
 import numpy as np
@@ -38,7 +38,7 @@ vphi = 200.#*kms #km/s
 
 Rs = 20.#*kpc_cm
 rho0 = 5932371.#*msun/(kpc_cm**3)
-#mcenter = 5.e10#*msun #Msun # EL FALLO ESTA AQUI, TIENES QUE CALCULAR LA MASA DENTRO DEL RADIO DEL SOL, ESTO ES SOLO UNA ESTIMACION, CALCULALA EN CONDICIONES
+
 
 
 x = np.zeros(N)
@@ -51,8 +51,6 @@ z = np.zeros(N)
 z[0] = 0.
 
 
-
-#vphi = np.sqrt(G*m[0]/a0) # au/year, initial velocity
 vx = np.zeros(N)
 vx[0] = -vphi*np.sin(phi0)
 vy = np.zeros(N)
@@ -95,12 +93,6 @@ def fvel(r):
     return - (G*mcenter/(np.sqrt(r[0]**2+r[1]**2+r[2]**2)**3.))*r
 
 
-#def fvel(r):
-#    ind = np.arange(len(m))
-#    dr = r-coord[ind !=j,i]
-#    return -G*np.sum((m[m!=m[j]]/(np.sqrt(dr[:,0]**2.+dr[:,1]**2.+dr[:,2]**2.)**3.))*dr.T,axis=1)
-
-
 coorde = np.array((x,y,z))
 vele = np.array((vx,vy,vz))
 
@@ -114,16 +106,13 @@ for i in range(N-1):
     coorde[:,i+1],vele[:,i+1] = Euler(coorde[:,i],vele[:,i],fcoord,fvel,dt)
     mcenter = 4.*np.pi*rho0*(Rs**3.)*(np.log((Rs+Rmaxrk4)/Rs)-(Rmaxrk4/(Rs+Rmaxrk4)))
     coordrk4[:,i+1],velrk4[:,i+1] = RK4(coordrk4[:,i],velrk4[:,i],fcoord,fvel,dt)        
-#    coord[0] = np.zeros((N,3)) # Es importante poner esto a la hora de resolver el sistema porque sino estas restando en fvel con nan y no se resuelven las orbitas
-
 
 # ================= PLOTS ==================
 
 plt.ion()
 plt.close('all')
 
-#plt.plot(coord[0,:,0],coord[0,:,1],'x')
-#for n in range(len(m-1)):
+
 plt.plot(coorde[0],coorde[1],'g',label='Euler')
 plt.plot(coordrk4[0],coordrk4[1],'b',label='RK4')
 plt.legend()
