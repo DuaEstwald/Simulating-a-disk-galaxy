@@ -1,4 +1,4 @@
-# This exercise pretends to recreate the 'Orbit of Planets' pdf
+# This exercise pretends to recreate the 'Project' pdf
 
 
 import numpy as np
@@ -56,7 +56,6 @@ z[0] = z0
 
 
 
-#vphi = np.sqrt(G*m[0]/a0) # au/year, initial velocity
 vx = np.zeros((N,len(m)))
 vx[0] = vx0
 vy = np.zeros((N,len(m)))
@@ -74,7 +73,7 @@ vz[0] = vz0
 def RK4(c,v,fc,fv,h):
     k1_c = fc(v)
     k1_v = fv(c)
-    k2_c = fc(v + k1_v*h*0.5) # Tienes que ponerlo todo con las mismas dimensiones
+    k2_c = fc(v + k1_v*h*0.5)
     k2_v = fv(c + k1_c*h*0.5)
     k3_c = fc(v + k2_v*h*0.5)
     k3_v = fv(c + k2_c*h*0.5)
@@ -100,9 +99,8 @@ for i in range(N-1):
     Rmax = np.sqrt(np.sum(coord[:,i]**2,axis=1))
     mcenter = 4.*np.pi*rho0*(Rs**3.)*(np.log((Rs+Rmax)/Rs)-(Rmax/(Rs+Rmax)))
     for j in range(len(m)): # Esto solo funciona para coord.T, vel.T
-       coord[j,i+1],vel[j,i+1] = RK4(coord[j,i],vel[j,i],fcoord,fvel,dt)        
-#    coord[0] = np.zeros((N,3)) # Es importante poner esto a la hora de resolver el sistema porque sino estas restando en fvel con nan y no se resuelven las orbitas
-
+       coord[j,i+1],vel[j,i+1] = RK4(coord[j,i],vel[j,i],fcoord,fvel,dt) 
+    
 t_sim = time.time()-start
 with open('timesimulation.txt','a') as tfile:
     tfile.write('\t'+str(Npart)+'\t'+str(t_sim)+'\n')
